@@ -15,10 +15,12 @@ public class Image: NSManagedObject {
     
     lazy var image: UIImage? = {
         if let id = id?.uuidString {
-            return try? AppDelegate.shared.imageStorage.image(forKey: id)
+            return try? storage?.image(forKey: id)
         }
         return nil
     }()
+    
+    var storage: ImageStorage?
     
     override public func awakeFromInsert() {
         super.awakeFromInsert()
@@ -29,7 +31,7 @@ public class Image: NSManagedObject {
         super.didSave()
         
         if let image = image, let id = id?.uuidString {
-            try? AppDelegate.shared.imageStorage.setImage(image, forKey: id)
+            try? storage?.setImage(image, forKey: id)
         }
     }
 }

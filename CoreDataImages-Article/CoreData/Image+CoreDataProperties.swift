@@ -2,12 +2,12 @@
 //  Image+CoreDataProperties.swift
 //  CoreDataImages-Article
 //
-//  Created by Vadym Bulavin on 4/26/19.
+//  Created by Vadym Bulavin on 5/8/19.
 //  Copyright © 2019 Vadim Bulavin. All rights reserved.
 //
 //
 
-import UIKit
+import Foundation
 import CoreData
 
 

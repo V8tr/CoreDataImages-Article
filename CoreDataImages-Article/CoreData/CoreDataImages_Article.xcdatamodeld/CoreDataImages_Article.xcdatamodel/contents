@@ -3,7 +3,15 @@
     <entity name="Image" representedClassName="Image" syncable="YES">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
     </entity>
+    <entity name="ImageBlob" representedClassName="ImageBlob" syncable="YES">
+        <attribute name="blob" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+    </entity>
+    <entity name="ImageInternalBlob" representedClassName="ImageInternalBlob" syncable="YES">
+        <attribute name="blob" optional="YES" attributeType="Binary" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Image" positionX="-63" positionY="-18" width="128" height="60"/>
+        <element name="ImageBlob" positionX="-63" positionY="-9" width="128" height="60"/>
+        <element name="ImageInternalBlob" positionX="-54" positionY="0" width="128" height="60"/>
     </elements>
 </model>

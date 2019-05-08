@@ -30,20 +30,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        internalStorageExample()
+        return true
+    }
+    
+    private func imageCacheExample() {
         let image = Image(context: persistentContainer.viewContext)
-        let renderer = UIGraphicsImageRenderer(bounds: UIScreen.main.bounds)
-        let snapshot = renderer.image { rendererContext in window?.layer.render(in: rendererContext.cgContext) }
-        image.image = snapshot
-        print(image.image)
+        image.image = makeSnapshot()
+        print(image.image as Any)
         saveContext()
         
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Image")
+        let fetchRequest: NSFetchRequest<Image> = Image.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", image.id!.uuidString)
         
-        let fetchedItem = try! persistentContainer.viewContext.fetch(fetchRequest).first as! Image
-        print(fetchedItem.image)
-
-        return true
+        let fetchedImage = try! persistentContainer.viewContext.fetch(fetchRequest).first
+        print(fetchedImage?.image as Any)
+    }
+    
+    private func externalStorageExample() {
+        let image = ImageBlob(context: persistentContainer.viewContext)
+        image.blob = makeSnapshot().toData() as NSData?
+        print(image.blob?.length as Any)
+        saveContext()
+        
+        persistentContainer.viewContext.reset()
+        
+        let fetchedImage = persistentContainer.viewContext.object(with: image.objectID) as! ImageBlob
+        print(fetchedImage.blob?.length as Any)
+    }
+    
+    private func internalStorageExample() {
+        let image = ImageInternalBlob(context: persistentContainer.viewContext)
+        image.blob = makeSnapshot().toData() as NSData?
+        print(image.blob!.length)
+        saveContext()
+        
+        persistentContainer.viewContext.reset()
+        
+        let fetchedImage = persistentContainer.viewContext.object(with: image.objectID) as! ImageInternalBlob
+        print(fetchedImage.blob!.length)
+    }
+    
+    private func makeSnapshot() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: UIScreen.main.bounds)
+        return renderer.image { rendererContext in window?.layer.render(in: rendererContext.cgContext) }
     }
 
     // MARK: - Core Data stack

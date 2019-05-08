@@ -33,7 +33,7 @@ final class ImageStorage {
     }
     
     func setImage(_ image: UIImage, forKey key: String) throws {
-        let data = try image.toData().unwrapOrThrow(error: Error.invalidImage)
+        let data = try image.toData().unwrapOrThrow(Error.invalidImage)
         let filePath = makeFilePath(for: key)
         _ = fileManager.createFile(atPath: filePath, contents: data, attributes: nil)
     }
@@ -46,7 +46,7 @@ final class ImageStorage {
     func image(forKey key: String) throws -> UIImage {
         let filePath = makeFilePath(for: key)
         let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
-        let image = try UIImage(data: data).unwrapOrThrow(error: Error.invalidImage)
+        let image = try UIImage(data: data).unwrapOrThrow(Error.invalidImage)
         return image
     }
 }
@@ -76,7 +76,7 @@ private extension ImageStorage {
 
 extension Optional {
     
-    func unwrapOrThrow(error: Error) throws -> Wrapped {
+    func unwrapOrThrow(_ error: Error) throws -> Wrapped {
         if let value = self {
             return value
         } else {
