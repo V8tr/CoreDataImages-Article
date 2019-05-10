@@ -49,13 +49,7 @@ class CoreDataImageBenchmark: XCTestCase {
     }
     
     override func tearDown() {
-        if let url = container.persistentStoreCoordinator.persistentStores.first?.url {
-            do {
-                try container.persistentStoreCoordinator.destroyPersistentStore(at: url, ofType: NSSQLiteStoreType, options: nil)
-            } catch {
-                print(error)
-            }
-        }
+        dropTable()
         super.tearDown()
     }
     
@@ -64,24 +58,37 @@ class CoreDataImageBenchmark: XCTestCase {
         super.tearDown()
     }
     
-    func test_benchmarkFileSystemStorage() {
-        runnerWrite(dataSet: "Image stored in file system",
+    func test_benchmarkWrite_forFileSystemStorage() {
+        runnerWrite(dataSet: "[WRITE] Image stored in file system",
                write: { _ = self.repository.makeImageStoredInFileSystem($0) })
     }
     
-    func test_benchmarkFileSystemStorage_read() {
-        runnerWrite(dataSet: "Read image stored in file system",
-               write: { _ = self.repository.makeImageStoredInFileSystem($0) })
-    }
-    
-    func test_benchmarkExternalStorage() {
-        runnerWrite(dataSet: "Image blob with allowed external storage",
+    func test_benchmarkWrite_forExternalStorage() {
+        runnerWrite(dataSet: "[WRITE] Image blob with allowed external storage",
                write: { _ = self.repository.makeExternallyStoredImage($0) })
     }
     
-    func test_benchmarkInternalStorage() {
-        runnerWrite(dataSet: "Image blob stored in SQLite table",
+    func test_benchmarkWrite_forInternalStorage() {
+        runnerWrite(dataSet: "[WRITE] Image blob stored in SQLite table",
                write: { _ = self.repository.makeInternallyStoredImage($0) })
+    }
+    
+    func test_benchmarkRead_forFileSystemStorage() {
+        runnerRead(dataSet: "[READ] Image stored in file system",
+                   write: { self.repository.makeImageStoredInFileSystem($0).objectID },
+                   read: { _ = self.repository.imageStoredInFileSystem(by: $0) })
+    }
+    
+    func test_benchmarkRead_forExternalStorage() {
+        runnerRead(dataSet: "[READ] Image blob with allowed external storage",
+                   write: { self.repository.makeExternallyStoredImage($0).objectID },
+                   read: { _ = self.repository.externallyStoredImage(by: $0) })
+    }
+    
+    func test_benchmarkRead_forInternalStorage() {
+        runnerRead(dataSet: "[READ] Image blob stored in SQLite table",
+                   write: { self.repository.makeInternallyStoredImage($0).objectID },
+                   read: { _ = self.repository.internallyStoredImage(by: $0) })
     }
     
     // MARK: - Helpers
@@ -104,10 +111,22 @@ class CoreDataImageBenchmark: XCTestCase {
         
         csv += "\(dataSet)\n"
         
-        let load = { (id: NSManagedObjectID) in { read(id) } }
         
-        let id = write(.extraSmall)
-        measure(operation: "Extra small", prepare: { self.container.viewContext.reset() }, block: load(id))
+        var id: NSManagedObjectID!
+
+        let prepare = { (image: UIImage) in {
+                id = write(image)
+                self.container.viewContext.reset()
+            }
+        }
+        
+        let load = { { read(id) } }
+
+        measure(operation: "Extra small", prepare: prepare(.extraSmall), block: load())
+        measure(operation: "Small", prepare: prepare(.small), block: load())
+        measure(operation: "Medium", prepare: prepare(.medium), block: load())
+        measure(operation: "Large", prepare: prepare(.large), block: load())
+        measure(operation: "Extra large", prepare: prepare(.extraLarge), block: load())
     }
     
     private func measure(operation: String, prepare: () -> Void = { }, block: () -> Void) {
@@ -127,6 +146,16 @@ class CoreDataImageBenchmark: XCTestCase {
     private func onSamplesCollected(_ results: [DataSample]) {
         for result in results {
             csv += "\(result.operation),\(result.iterations),\(result.duration)\n"
+        }
+    }
+    
+    private func dropTable() {
+        if let url = container.persistentStoreCoordinator.persistentStores.first?.url {
+            do {
+                try container.persistentStoreCoordinator.destroyPersistentStore(at: url, ofType: NSSQLiteStoreType, options: nil)
+            } catch {
+                print(error)
+            }
         }
     }
 }

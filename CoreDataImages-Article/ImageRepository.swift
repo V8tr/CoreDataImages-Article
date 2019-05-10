@@ -20,7 +20,7 @@ class ImageRepository {
     }
 
     func makeImageStoredInFileSystem(_ bitmap: UIImage) -> ImageWithFileSystemStorage {
-        let image = ImageWithFileSystemStorage(context: container.viewContext)
+        let image = insert(ImageWithFileSystemStorage.self, into: container.viewContext)
         image.storage = imageStorage
         image.image = bitmap
         saveContext()
@@ -28,14 +28,14 @@ class ImageRepository {
     }
     
     func makeExternallyStoredImage(_ bitmap: UIImage) -> ImageBlobWithExternalStorage {
-        let image = ImageBlobWithExternalStorage(context: container.viewContext)
+        let image = insert(ImageBlobWithExternalStorage.self, into: container.viewContext)
         image.blob = bitmap.toData() as NSData?
         saveContext()
         return image
     }
     
     func makeInternallyStoredImage(_ bitmap: UIImage) -> ImageBlobWithInternalStorage {
-        let image = ImageBlobWithInternalStorage(context: container.viewContext)
+        let image = insert(ImageBlobWithInternalStorage.self, into: container.viewContext)
         image.blob = bitmap.toData() as NSData?
         saveContext()
         return image
@@ -57,5 +57,9 @@ class ImageRepository {
 
     private func saveContext() {
         try! container.viewContext.save()
+    }
+    
+    private func insert<T>(_ type: T.Type, into context: NSManagedObjectContext) -> T {
+        return NSEntityDescription.insertNewObject(forEntityName: String(describing: T.self), into: context) as! T
     }
 }
