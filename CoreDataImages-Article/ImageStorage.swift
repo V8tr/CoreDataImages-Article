@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Saves and loads images to file on disk.
 final class ImageStorage {
     
     let fileManager: FileManager
@@ -51,6 +52,8 @@ final class ImageStorage {
     }
 }
 
+// MARK: - File System Helpers
+
 private extension ImageStorage {
 
     func setDirectoryAttributes(_ attributes: [FileAttributeKey: Any]) throws {
@@ -67,20 +70,11 @@ private extension ImageStorage {
     }
 }
 
+// MARK: - Error
+
 private extension ImageStorage {
     
     enum Error: Swift.Error {
         case invalidImage
-    }
-}
-
-extension Optional {
-    
-    func unwrapOrThrow(_ error: Error) throws -> Wrapped {
-        if let value = self {
-            return value
-        } else {
-            throw error
-        }
     }
 }

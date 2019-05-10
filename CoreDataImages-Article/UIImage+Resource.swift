@@ -9,12 +9,19 @@
 import UIKit
 
 extension UIImage {
-
-    static var iphoneXSMax: UIImage {
-        if let path = Bundle.main.path(forResource: "iPhone-XS-Max-Portrait-Space-Gray", ofType: "png"),
+    
+    static let extraSmall = image(fromFile: "extra-small")
+    static let small = image(fromFile: "small")
+    static let medium = image(fromFile: "medium")
+    static let large = image(fromFile: "large")
+    static let extraLarge = image(fromFile: "extra-large")
+    
+    private static func image(fromFile name: String) -> UIImage {
+        if let path = Bundle.main.path(forResource: name, ofType: "png"),
             let image = UIImage(contentsOfFile: path) {
             return image
         }
         fatalError("Programmer error if image is missing.")
     }
 }
+

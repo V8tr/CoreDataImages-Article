@@ -9,6 +9,7 @@
 import CoreData
 import class UIKit.UIImage
 
+/// Saves and loads images from CoreData.
 class ImageRepository {
     private let container: NSPersistentContainer
     private let imageStorage: ImageStorage
@@ -18,40 +19,40 @@ class ImageRepository {
         self.imageStorage = imageStorage
     }
 
-    func makeImage() -> Image {
-        let image = Image(context: container.viewContext)
+    func makeImageStoredInFileSystem(_ bitmap: UIImage) -> ImageWithFileSystemStorage {
+        let image = ImageWithFileSystemStorage(context: container.viewContext)
         image.storage = imageStorage
-        image.image = UIImage.iphoneXSMax
+        image.image = bitmap
         saveContext()
         return image
     }
     
-    func makeImageBlob() -> ImageBlob {
-        let image = ImageBlob(context: container.viewContext)
-        image.blob = UIImage.iphoneXSMax.toData() as NSData?
+    func makeExternallyStoredImage(_ bitmap: UIImage) -> ImageBlobWithExternalStorage {
+        let image = ImageBlobWithExternalStorage(context: container.viewContext)
+        image.blob = bitmap.toData() as NSData?
         saveContext()
         return image
     }
     
-    func makeInternallyStoredImage() -> ImageInternalBlob {
-        let image = ImageInternalBlob(context: container.viewContext)
-        image.blob = UIImage.iphoneXSMax.toData() as NSData?
+    func makeInternallyStoredImage(_ bitmap: UIImage) -> ImageBlobWithInternalStorage {
+        let image = ImageBlobWithInternalStorage(context: container.viewContext)
+        image.blob = bitmap.toData() as NSData?
         saveContext()
         return image
     }
     
-    func image(by id: NSManagedObjectID) -> Image {
-        let image = container.viewContext.object(with: id) as! Image
+    func imageStoredInFileSystem(by id: NSManagedObjectID) -> ImageWithFileSystemStorage {
+        let image = container.viewContext.object(with: id) as! ImageWithFileSystemStorage
         image.storage = imageStorage
         return image
     }
     
-    func imageBlob(by id: NSManagedObjectID) -> ImageBlob {
-        return container.viewContext.object(with: id) as! ImageBlob
+    func externallyStoredImage(by id: NSManagedObjectID) -> ImageBlobWithExternalStorage {
+        return container.viewContext.object(with: id) as! ImageBlobWithExternalStorage
     }
     
-    func internallyStoredImage(by id: NSManagedObjectID) -> ImageInternalBlob {
-        return container.viewContext.object(with: id) as! ImageInternalBlob
+    func internallyStoredImage(by id: NSManagedObjectID) -> ImageBlobWithInternalStorage {
+        return container.viewContext.object(with: id) as! ImageBlobWithInternalStorage
     }
 
     private func saveContext() {

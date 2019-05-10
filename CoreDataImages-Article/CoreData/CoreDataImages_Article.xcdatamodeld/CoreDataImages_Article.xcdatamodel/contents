@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.99" systemVersion="18D109" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Image" representedClassName="Image" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
-    </entity>
-    <entity name="ImageBlob" representedClassName="ImageBlob" syncable="YES">
+    <entity name="ImageBlobWithExternalStorage" representedClassName="ImageBlobWithExternalStorage" syncable="YES">
         <attribute name="blob" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
     </entity>
-    <entity name="ImageInternalBlob" representedClassName="ImageInternalBlob" syncable="YES">
+    <entity name="ImageBlobWithInternalStorage" representedClassName="ImageBlobWithInternalStorage" syncable="YES">
         <attribute name="blob" optional="YES" attributeType="Binary" syncable="YES"/>
     </entity>
+    <entity name="ImageWithFileSystemStorage" representedClassName="ImageWithFileSystemStorage" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="Image" positionX="-63" positionY="-18" width="128" height="60"/>
-        <element name="ImageBlob" positionX="-63" positionY="-9" width="128" height="60"/>
-        <element name="ImageInternalBlob" positionX="-54" positionY="0" width="128" height="60"/>
+        <element name="ImageWithFileSystemStorage" positionX="-63" positionY="-18" width="128" height="58"/>
+        <element name="ImageBlobWithExternalStorage" positionX="-63" positionY="-9" width="128" height="58"/>
+        <element name="ImageBlobWithInternalStorage" positionX="-54" positionY="0" width="128" height="58"/>
     </elements>
 </model>

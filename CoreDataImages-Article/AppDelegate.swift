@@ -14,70 +14,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    static var shared: AppDelegate {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            return appDelegate
-        }
-        fatalError("App delegate is invalid")
-    }
-    
-    lazy var imageStorage: ImageStorage = {
-        do {
-            return try ImageStorage(name: "CoreDataImages-Article")
-        } catch {
-            fatalError("Unresolved error \(error)")
-        }
-    }()
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        internalStorageExample()
+//        _ = persistentContainer
         return true
     }
     
-    private func imageCacheExample() {
-        let image = Image(context: persistentContainer.viewContext)
-        image.image = makeSnapshot()
-        print(image.image as Any)
-        saveContext()
-        
-        let fetchRequest: NSFetchRequest<Image> = Image.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", image.id!.uuidString)
-        
-        let fetchedImage = try! persistentContainer.viewContext.fetch(fetchRequest).first
-        print(fetchedImage?.image as Any)
-    }
-    
-    private func externalStorageExample() {
-        let image = ImageBlob(context: persistentContainer.viewContext)
-        image.blob = makeSnapshot().toData() as NSData?
-        print(image.blob?.length as Any)
-        saveContext()
-        
-        persistentContainer.viewContext.reset()
-        
-        let fetchedImage = persistentContainer.viewContext.object(with: image.objectID) as! ImageBlob
-        print(fetchedImage.blob?.length as Any)
-    }
-    
-    private func internalStorageExample() {
-        let image = ImageInternalBlob(context: persistentContainer.viewContext)
-        image.blob = makeSnapshot().toData() as NSData?
-        print(image.blob!.length)
-        saveContext()
-        
-        persistentContainer.viewContext.reset()
-        
-        let fetchedImage = persistentContainer.viewContext.object(with: image.objectID) as! ImageInternalBlob
-        print(fetchedImage.blob!.length)
-    }
-    
-    private func makeSnapshot() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(bounds: UIScreen.main.bounds)
-        return renderer.image { rendererContext in window?.layer.render(in: rendererContext.cgContext) }
-    }
-
-    // MARK: - Core Data stack
-
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "CoreDataImages_Article")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -87,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         return container
     }()
-
+    
     func saveContext() {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -99,6 +40,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
 }
 
