@@ -8,11 +8,11 @@
 
 import UIKit
 
-/// Saves and loads images to file on disk.
+/// Saves and loads images to the file system.
 final class ImageStorage {
     
-    let fileManager: FileManager
-    let path: String
+    private let fileManager: FileManager
+    private let path: String
     
     init(name: String, fileManager: FileManager = FileManager.default) throws {
         self.fileManager = fileManager
@@ -25,29 +25,20 @@ final class ImageStorage {
         try setDirectoryAttributes([.protectionKey: FileProtectionType.complete])
     }
     
-    func createDirectory() throws {
-        guard !fileManager.fileExists(atPath: path) else {
-            return
-        }
-        
-        try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
-    }
-    
     func setImage(_ image: UIImage, forKey key: String) throws {
-        let data = try image.toData().unwrapOrThrow(Error.invalidImage)
+        guard let data = image.toData() else {
+            throw Error.invalidImage
+        }
         let filePath = makeFilePath(for: key)
         _ = fileManager.createFile(atPath: filePath, contents: data, attributes: nil)
-    }
-    
-    func removeObject(forKey key: String) throws {
-        let filePath = makeFilePath(for: key)
-        try fileManager.removeItem(atPath: filePath)
     }
     
     func image(forKey key: String) throws -> UIImage {
         let filePath = makeFilePath(for: key)
         let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
-        let image = try UIImage(data: data).unwrapOrThrow(Error.invalidImage)
+        guard let image = UIImage(data: data) else {
+            throw Error.invalidImage
+        }
         return image
     }
 }
@@ -67,6 +58,14 @@ private extension ImageStorage {
 
     func makeFilePath(for key: String) -> String {
         return "\(path)/\(makeFileName(for: key))"
+    }
+    
+    func createDirectory() throws {
+        guard !fileManager.fileExists(atPath: path) else {
+            return
+        }
+        
+        try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
     }
 }
 

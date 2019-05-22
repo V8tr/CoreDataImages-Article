@@ -10,11 +10,14 @@ import CoreData
 import XCTest
 @testable import CoreDataImages_Article
 
-var csv = "Image size,Number of iterations,Duration in seconds\n"
+var csv = "Image size,Duration in seconds\n"
+
+struct DataSample {
+    let operation: String
+    let duration: TimeInterval
+}
 
 class CoreDataImageBenchmark: XCTestCase {
-    
-    typealias DataSample = (operation: String, iterations: Int, duration: TimeInterval)
     
     let container: NSPersistentContainer = {
         // Create CoreData container
@@ -32,17 +35,16 @@ class CoreDataImageBenchmark: XCTestCase {
         return container
     }()
     
-    var repository: ImageRepository!
+    var repository: ImageDAO!
     
     override func setUp() {
         super.setUp()
         
-        Benchmark.dataPoints = [1]
-        Benchmark.iterationsPerDataPoint = 1
+        Benchmark.numberOfIterations = 10
         
         do {
             let storage = try ImageStorage(name: "CoreDataImages-Article")
-            repository = ImageRepository(container: container, imageStorage: storage)
+            repository = ImageDAO(container: container, imageStorage: storage)
         } catch {
             XCTFail(error.localizedDescription)
         }
@@ -60,17 +62,17 @@ class CoreDataImageBenchmark: XCTestCase {
     
     func test_benchmarkWrite_forFileSystemStorage() {
         runnerWrite(dataSet: "[WRITE] Image stored in file system",
-               write: { _ = self.repository.makeImageStoredInFileSystem($0) })
+                    write: { _ = self.repository.makeImageStoredInFileSystem($0) })
     }
     
     func test_benchmarkWrite_forExternalStorage() {
         runnerWrite(dataSet: "[WRITE] Image blob with allowed external storage",
-               write: { _ = self.repository.makeExternallyStoredImage($0) })
+                    write: { _ = self.repository.makeExternallyStoredImage($0) })
     }
     
     func test_benchmarkWrite_forInternalStorage() {
         runnerWrite(dataSet: "[WRITE] Image blob stored in SQLite table",
-               write: { _ = self.repository.makeInternallyStoredImage($0) })
+                    write: { _ = self.repository.makeInternallyStoredImage($0) })
     }
     
     func test_benchmarkRead_forFileSystemStorage() {
@@ -97,7 +99,7 @@ class CoreDataImageBenchmark: XCTestCase {
         csv += "\(dataSet)\n"
         
         let save = { (image: UIImage) in { write(image) } }
-
+        
         measure(operation: "Extra small", block: save(.extraSmall))
         measure(operation: "Small", block: save(.small))
         measure(operation: "Medium", block: save(.medium))
@@ -111,17 +113,16 @@ class CoreDataImageBenchmark: XCTestCase {
         
         csv += "\(dataSet)\n"
         
-        
         var id: NSManagedObjectID!
-
+        
         let prepare = { (image: UIImage) in {
-                id = write(image)
-                self.container.viewContext.reset()
+            id = write(image)
+            self.container.viewContext.reset()
             }
         }
         
         let load = { { read(id) } }
-
+        
         measure(operation: "Extra small", prepare: prepare(.extraSmall), block: load())
         measure(operation: "Small", prepare: prepare(.small), block: load())
         measure(operation: "Medium", prepare: prepare(.medium), block: load())
@@ -132,20 +133,16 @@ class CoreDataImageBenchmark: XCTestCase {
     private func measure(operation: String, prepare: () -> Void = { }, block: () -> Void) {
         var results: [DataSample] = []
         
-        for dataPoint in Benchmark.dataPoints {
-            prepare()
-            let average = Benchmark.measureAverage(dataPoint: dataPoint) {
-                block()
-            }
-            results.append((operation, dataPoint, average))
-        }
+        prepare()
+        let average = Benchmark.measureAverage(prepare: prepare, block: block)
+        results.append(.init(operation: operation, duration: average))
         
         onSamplesCollected(results)
     }
     
     private func onSamplesCollected(_ results: [DataSample]) {
         for result in results {
-            csv += "\(result.operation),\(result.iterations),\(result.duration)\n"
+            csv += "\(result.operation),\(result.duration)\n"
         }
     }
     

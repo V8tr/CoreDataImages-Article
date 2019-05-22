@@ -10,22 +10,17 @@ import Foundation
 
 struct Benchmark {
     
-    static var iterationsPerDataPoint = 10
-    static var dataPoints = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16_384, 32_768, 65_536, 131_072, 262_144, 524_288, 1_048_576]
+    static var numberOfIterations = 100
     
-    static func measureAverage(dataPoint: Int, block: () -> Void) -> TimeInterval {
+    static func measureAverage(prepare: () -> Void, block: () -> Void) -> TimeInterval {
         var accumulatedResult: TimeInterval = 0
         
-        for _ in 0..<dataPoint {
-            let result = measure {
-                for _ in 0..<iterationsPerDataPoint {
-                    block()
-                }
-            }
-            accumulatedResult += result
+        for _ in 0..<numberOfIterations {
+            prepare()
+            accumulatedResult += measure(block: block)
         }
         
-        return accumulatedResult / TimeInterval(iterationsPerDataPoint)
+        return accumulatedResult / TimeInterval(numberOfIterations)
     }
     
     static func measure(block: () -> Void) -> TimeInterval {

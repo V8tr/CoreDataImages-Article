@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		801236DF22719F2B0030B7A4 /* ImageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801236DE22719F2B0030B7A4 /* ImageStorage.swift */; };
-		801EE5A1228327ED00F714C0 /* ImageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EE5A0228327ED00F714C0 /* ImageRepository.swift */; };
+		801EE5A1228327ED00F714C0 /* ImageDAO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EE5A0228327ED00F714C0 /* ImageDAO.swift */; };
 		802A650422832B9100F26B26 /* UIImage+Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802A650322832B9100F26B26 /* UIImage+Resource.swift */; };
 		802A650622832EB100F26B26 /* CoreDataImageBenchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802A650522832EB100F26B26 /* CoreDataImageBenchmark.swift */; };
 		802A6507228330F700F26B26 /* CoreDataImages_Article.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 808377522270AD6A006BCB7E /* CoreDataImages_Article.xcdatamodeld */; };
@@ -17,7 +17,6 @@
 		807ACFC52285854600A01A70 /* ImageBlobWithInternalStorage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807ACFBD2285853100A01A70 /* ImageBlobWithInternalStorage+CoreDataProperties.swift */; };
 		807ACFC62285855F00A01A70 /* ImageBlobWithExternalStorage+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807ACFBE2285853100A01A70 /* ImageBlobWithExternalStorage+CoreDataClass.swift */; };
 		807ACFC72285855F00A01A70 /* ImageBlobWithExternalStorage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807ACFBF2285853100A01A70 /* ImageBlobWithExternalStorage+CoreDataProperties.swift */; };
-		807ACFC92285859600A01A70 /* Optional+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807ACFC82285859600A01A70 /* Optional+Ext.swift */; };
 		807ACFCC2285876D00A01A70 /* ImageWithFileSystemStorage+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807ACFCA2285876D00A01A70 /* ImageWithFileSystemStorage+CoreDataClass.swift */; };
 		807ACFCD2285876D00A01A70 /* ImageWithFileSystemStorage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807ACFCB2285876D00A01A70 /* ImageWithFileSystemStorage+CoreDataProperties.swift */; };
 		8083774C2270AD6A006BCB7E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8083774B2270AD6A006BCB7E /* AppDelegate.swift */; };
@@ -31,7 +30,7 @@
 		808AEB8522859B0C0008B0B3 /* large.png in Resources */ = {isa = PBXBuildFile; fileRef = 808AEB8022859B0C0008B0B3 /* large.png */; };
 		808AEB8622859B0C0008B0B3 /* extra-large.png in Resources */ = {isa = PBXBuildFile; fileRef = 808AEB8122859B0C0008B0B3 /* extra-large.png */; };
 		808AEB8722859B0C0008B0B3 /* small.png in Resources */ = {isa = PBXBuildFile; fileRef = 808AEB8222859B0C0008B0B3 /* small.png */; };
-		808B0B202271A8B200BCF0DA /* UIImage+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808B0B1F2271A8B200BCF0DA /* UIImage+Cache.swift */; };
+		809662A52295922000780CBE /* UIImage+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809662A42295922000780CBE /* UIImage+Data.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +45,7 @@
 
 /* Begin PBXFileReference section */
 		801236DE22719F2B0030B7A4 /* ImageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorage.swift; sourceTree = "<group>"; };
-		801EE5A0228327ED00F714C0 /* ImageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRepository.swift; sourceTree = "<group>"; };
+		801EE5A0228327ED00F714C0 /* ImageDAO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDAO.swift; sourceTree = "<group>"; };
 		802A650322832B9100F26B26 /* UIImage+Resource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resource.swift"; sourceTree = "<group>"; };
 		802A650522832EB100F26B26 /* CoreDataImageBenchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataImageBenchmark.swift; sourceTree = "<group>"; };
 		807ACFBA228571E300A01A70 /* Benchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Benchmark.swift; sourceTree = "<group>"; };
@@ -54,7 +53,6 @@
 		807ACFBD2285853100A01A70 /* ImageBlobWithInternalStorage+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageBlobWithInternalStorage+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		807ACFBE2285853100A01A70 /* ImageBlobWithExternalStorage+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageBlobWithExternalStorage+CoreDataClass.swift"; sourceTree = "<group>"; };
 		807ACFBF2285853100A01A70 /* ImageBlobWithExternalStorage+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageBlobWithExternalStorage+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		807ACFC82285859600A01A70 /* Optional+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Ext.swift"; sourceTree = "<group>"; };
 		807ACFCA2285876D00A01A70 /* ImageWithFileSystemStorage+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageWithFileSystemStorage+CoreDataClass.swift"; sourceTree = "<group>"; };
 		807ACFCB2285876D00A01A70 /* ImageWithFileSystemStorage+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageWithFileSystemStorage+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		808377482270AD6A006BCB7E /* CoreDataImages-Article.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CoreDataImages-Article.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,7 +70,7 @@
 		808AEB8022859B0C0008B0B3 /* large.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large.png; sourceTree = "<group>"; };
 		808AEB8122859B0C0008B0B3 /* extra-large.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "extra-large.png"; sourceTree = "<group>"; };
 		808AEB8222859B0C0008B0B3 /* small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = small.png; sourceTree = "<group>"; };
-		808B0B1F2271A8B200BCF0DA /* UIImage+Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Cache.swift"; sourceTree = "<group>"; };
+		809662A42295922000780CBE /* UIImage+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Data.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,11 +114,10 @@
 			children = (
 				8083774B2270AD6A006BCB7E /* AppDelegate.swift */,
 				8083774D2270AD6A006BCB7E /* ViewController.swift */,
-				801EE5A0228327ED00F714C0 /* ImageRepository.swift */,
+				801EE5A0228327ED00F714C0 /* ImageDAO.swift */,
 				801236DE22719F2B0030B7A4 /* ImageStorage.swift */,
-				808B0B1F2271A8B200BCF0DA /* UIImage+Cache.swift */,
+				809662A42295922000780CBE /* UIImage+Data.swift */,
 				802A650322832B9100F26B26 /* UIImage+Resource.swift */,
-				807ACFC82285859600A01A70 /* Optional+Ext.swift */,
 				808377722270B3EF006BCB7E /* CoreData */,
 				808377732270B422006BCB7E /* Supporting Files */,
 				8083775A2270AD6B006BCB7E /* Info.plist */,
@@ -278,13 +275,12 @@
 				807ACFCD2285876D00A01A70 /* ImageWithFileSystemStorage+CoreDataProperties.swift in Sources */,
 				8083774E2270AD6A006BCB7E /* ViewController.swift in Sources */,
 				808377542270AD6A006BCB7E /* CoreDataImages_Article.xcdatamodeld in Sources */,
+				809662A52295922000780CBE /* UIImage+Data.swift in Sources */,
 				807ACFC52285854600A01A70 /* ImageBlobWithInternalStorage+CoreDataProperties.swift in Sources */,
 				8083774C2270AD6A006BCB7E /* AppDelegate.swift in Sources */,
-				801EE5A1228327ED00F714C0 /* ImageRepository.swift in Sources */,
-				808B0B202271A8B200BCF0DA /* UIImage+Cache.swift in Sources */,
+				801EE5A1228327ED00F714C0 /* ImageDAO.swift in Sources */,
 				807ACFCC2285876D00A01A70 /* ImageWithFileSystemStorage+CoreDataClass.swift in Sources */,
 				807ACFC62285855F00A01A70 /* ImageBlobWithExternalStorage+CoreDataClass.swift in Sources */,
-				807ACFC92285859600A01A70 /* Optional+Ext.swift in Sources */,
 				802A650422832B9100F26B26 /* UIImage+Resource.swift in Sources */,
 				807ACFC42285854600A01A70 /* ImageBlobWithInternalStorage+CoreDataClass.swift in Sources */,
 			);

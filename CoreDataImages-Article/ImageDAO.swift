@@ -1,5 +1,5 @@
 //
-//  ImageRepository.swift
+//  ImageDAO.swift
 //  CoreDataImages-Article
 //
 //  Created by Vadym Bulavin on 5/8/19.
@@ -10,7 +10,7 @@ import CoreData
 import class UIKit.UIImage
 
 /// Saves and loads images from CoreData.
-class ImageRepository {
+class ImageDAO {
     private let container: NSPersistentContainer
     private let imageStorage: ImageStorage
 
