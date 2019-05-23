@@ -23,5 +23,12 @@ extension UIImage {
         }
         fatalError("Programmer error if image is missing.")
     }
+    
+    static func fromColor(_ color: UIColor, size: CGSize) -> UIImage {
+        return UIGraphicsImageRenderer(size: size).image { context in
+            color.setFill()
+            context.fill(CGRect(origin: .zero, size: size))
+        }
+    }
 }
 

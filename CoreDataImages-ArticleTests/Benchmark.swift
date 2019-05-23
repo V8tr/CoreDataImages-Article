@@ -31,3 +31,8 @@ struct Benchmark {
         return totalTime
     }
 }
+
+struct Measurement {
+    let sizeInBytes: Int
+    let duration: TimeInterval
+}

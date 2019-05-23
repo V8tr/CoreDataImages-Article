@@ -10,12 +10,7 @@ import CoreData
 import XCTest
 @testable import CoreDataImages_Article
 
-var csv = "Image size,Duration in seconds\n"
-
-struct DataSample {
-    let operation: String
-    let duration: TimeInterval
-}
+var csv = "Image size in bytes,Duration in seconds\n"
 
 class CoreDataImageBenchmark: XCTestCase {
     
@@ -37,10 +32,15 @@ class CoreDataImageBenchmark: XCTestCase {
     
     var repository: ImageDAO!
     
+    override class func setUp() {
+        Benchmark.numberOfIterations = 1
+        SampleData.initialize()
+        print("✅ Sample data has been initialized.")
+        super.tearDown()
+    }
+    
     override func setUp() {
         super.setUp()
-        
-        Benchmark.numberOfIterations = 10
         
         do {
             let storage = try ImageStorage(name: "CoreDataImages-Article")
@@ -51,7 +51,7 @@ class CoreDataImageBenchmark: XCTestCase {
     }
     
     override func tearDown() {
-        dropTable()
+        container.dropTable()
         super.tearDown()
     }
     
@@ -100,11 +100,9 @@ class CoreDataImageBenchmark: XCTestCase {
         
         let save = { (image: UIImage) in { write(image) } }
         
-        measure(operation: "Extra small", block: save(.extraSmall))
-        measure(operation: "Small", block: save(.small))
-        measure(operation: "Medium", block: save(.medium))
-        measure(operation: "Large", block: save(.large))
-        measure(operation: "Extra Large", block: save(.extraLarge))
+        for sampleImage in SampleData.images {
+            measure(image: sampleImage, prepare: {}, block: save(sampleImage))
+        }
     }
     
     private func runnerRead(dataSet: String,
@@ -123,33 +121,23 @@ class CoreDataImageBenchmark: XCTestCase {
         
         let load = { { read(id) } }
         
-        measure(operation: "Extra small", prepare: prepare(.extraSmall), block: load())
-        measure(operation: "Small", prepare: prepare(.small), block: load())
-        measure(operation: "Medium", prepare: prepare(.medium), block: load())
-        measure(operation: "Large", prepare: prepare(.large), block: load())
-        measure(operation: "Extra large", prepare: prepare(.extraLarge), block: load())
-    }
-    
-    private func measure(operation: String, prepare: () -> Void = { }, block: () -> Void) {
-        var results: [DataSample] = []
-        
-        prepare()
-        let average = Benchmark.measureAverage(prepare: prepare, block: block)
-        results.append(.init(operation: operation, duration: average))
-        
-        onSamplesCollected(results)
-    }
-    
-    private func onSamplesCollected(_ results: [DataSample]) {
-        for result in results {
-            csv += "\(result.operation),\(result.duration)\n"
+        for sampleImage in SampleData.images {
+            measure(image: sampleImage, prepare: prepare(sampleImage), block: load())
         }
     }
     
-    private func dropTable() {
-        if let url = container.persistentStoreCoordinator.persistentStores.first?.url {
+    private func measure(image: UIImage, prepare: () -> Void, block: () -> Void) {
+        let duration = Benchmark.measureAverage(prepare: prepare, block: block)
+        let result = Measurement(sizeInBytes: image.sizeInBytes, duration: duration)
+        csv += "\(result.sizeInBytes),\(result.duration)\n"
+    }
+}
+
+private extension NSPersistentContainer {
+    func dropTable() {
+        if let url = persistentStoreCoordinator.persistentStores.first?.url {
             do {
-                try container.persistentStoreCoordinator.destroyPersistentStore(at: url, ofType: NSSQLiteStoreType, options: nil)
+                try persistentStoreCoordinator.destroyPersistentStore(at: url, ofType: NSSQLiteStoreType, options: nil)
             } catch {
                 print(error)
             }
